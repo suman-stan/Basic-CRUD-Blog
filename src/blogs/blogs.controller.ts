@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { Blog } from './blog.model';
 import { BlogsService } from './blogs.service';
+import { CreateBlogDto } from './dto/create-blog-dto';
 
 @Controller('blogs')
 export class BlogsController {
@@ -12,11 +13,7 @@ export class BlogsController {
     }
 
     @Post()
-    createBlog(
-        @Body('title') title: string,
-        @Body('description') description: string,
-        @Body('author') author: string,
-    ):Blog {
-        return this.blogsService.createBlog(title, description, author);
+    createBlog(@Body() createBlogDto: CreateBlogDto):Blog {
+        return this.blogsService.createBlog(createBlogDto);
     }
 }

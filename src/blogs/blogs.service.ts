@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Blog, BlogStatus } from './blog.model';
 import { v1 as uuid} from 'uuid';
+import { CreateBlogDto } from './dto/create-blog-dto';
 
 @Injectable()
 export class BlogsService {
@@ -10,7 +11,8 @@ export class BlogsService {
         return this.blogs;
     }
 
-    createBlog(title: string, description: string, author: string): Blog {
+    createBlog(createBlogDto: CreateBlogDto): Blog {
+        const {title, description, author } = createBlogDto;
         const blog: Blog = {
             id: uuid(),
             title,
