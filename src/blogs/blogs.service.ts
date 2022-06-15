@@ -11,6 +11,11 @@ export class BlogsService {
         return this.blogs;
     }
 
+    getBlogById(id: string): Blog {
+        return this.blogs.find(blog => blog.id === id);
+
+    }
+
     createBlog(createBlogDto: CreateBlogDto): Blog {
         const {title, description, author } = createBlogDto;
         const blog: Blog = {
