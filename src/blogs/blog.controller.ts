@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
 import { CreateBlogDto } from "src/dto/create-blog.dto";
+import { UpdateBlogDto } from "src/dto/update-blog.dto";
 import { Blog } from "src/entities/blog.entity";
 import { BlogService } from "./blog.service";
 
-@Controller()
+@Controller('/blog')
 export class BlogController {
     constructor(
         private readonly blogService:BlogService
@@ -14,26 +15,28 @@ export class BlogController {
         return this.blogService.getAllBlog();
     }
 
+    @Get('/:id')
+    getBlogById(@Param('id') id: number) {
+        return this.blogService.getBlogById(id)
+    }
+
     @Post('/')
     async createBlog(@Body() createBlogDto:CreateBlogDto): Promise<Blog> {
+        // console.log('create-dto', createBlogDto.title)
         return this.blogService.createBlog(createBlogDto)
         }
         
-    // async createBlog(@Body() body:CreateBlogDto) {
-    //     const newBlog = new Blog();
-    //     newBlog.title = body.title;
-    //     // newBlog.setTitle(body.title);
-    //     await this.blogService.createBlog(newBlog);
-    // }
+    @Delete('/:id')
+    deleteBlogById(@Param('id') id: number) {
+        return this.blogService.deleteBlogById(id);
+    }
 
-    // async createBlog() {
-    //     const newBlog = new Blog();
-    //     newBlog.title = "Frist Blog";
-    //     newBlog.author = "JJ";
-    //     newBlog.description = "This is my first Blog";
-    //     await this.blogService.createBlog(newBlog)
-    // }
-
-    
+    @Patch('/:id')
+    updateBlogById(
+        @Param('id') id:number,
+        @Body() updateBlogDto:UpdateBlogDto
+        ) {
+        return this.blogService.updateBlogById(id, updateBlogDto);
+    }
     
 }
