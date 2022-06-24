@@ -4,6 +4,7 @@ import { BlogController } from './blogs/blog.controller';
 import { BlogModule } from './blogs/blog.module';
 import { BlogService } from './blogs/blog.service';
 import { Blog } from './entities/blog.entity';
+import { Comment } from './entities/commet.entity';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { Blog } from './entities/blog.entity';
       username: 'root',
       password: '',
       database: 'blog',
-      entities: [Blog],
+      entities: [Blog, Comment],
       synchronize: true,
     }),
     BlogModule,

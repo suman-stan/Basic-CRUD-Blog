@@ -1,11 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Comment } from "./commet.entity";
 @Entity()
 export class Blog {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({length:10 })
     title: string
 
     @Column()
@@ -13,6 +13,9 @@ export class Blog {
 
     @Column()
     description: string
+
+    @OneToMany(() => Comment, (comment) => comment.blog)
+    comments: Comment[] //shows it has reference to comments
 
     // getTitle(): string{
     //     return this.title

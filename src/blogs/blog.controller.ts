@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UsePipes, ValidationPipe } from "@nestjs/common";
 import { CreateBlogDto } from "src/dto/create-blog.dto";
+import { CreateCommentDto } from "src/dto/create-comment.dto";
 import { UpdateBlogDto } from "src/dto/update-blog.dto";
 import { Blog } from "src/entities/blog.entity";
 import { BlogService } from "./blog.service";
@@ -27,6 +28,7 @@ export class BlogController {
         }
         
     @Delete('/:id')
+    @UsePipes(ValidationPipe)
     deleteBlogById(@Param('id') id: number) {
         return this.blogService.deleteBlogById(id);
     }
@@ -39,4 +41,8 @@ export class BlogController {
         return this.blogService.updateBlogById(id, updateBlogDto);
     }
     
-}
+    @Post('/:id/comment')
+    createComment(@Param('id') id: number, @Body() createCommentDto: CreateCommentDto) {
+        return this.blogService.createComment(id, createCommentDto)
+    }
+        }
