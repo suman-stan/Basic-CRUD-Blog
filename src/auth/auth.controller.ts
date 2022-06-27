@@ -16,7 +16,7 @@ export class AuthController {
     }
     
     @Post('/signin')
-    async signin(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto) {
-        return await this.authService.validateUserPassword(authCredentialsDto)
+    async signin(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string}> {
+        return await this.authService.signin(authCredentialsDto)
     }
 }

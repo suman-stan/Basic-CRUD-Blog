@@ -4,13 +4,15 @@ import { AuthCredentialsDto } from "src/dto/auth-credentials.dto";
 import { User } from "src/entities/user.entity";
 import { Repository } from "typeorm";
 import * as bcrypt from 'bcrypt'
-import e from "express";
+import { JwtService } from "@nestjs/jwt";
+import { JwtPlayload } from "./jwt-playload.interface";
 
 @Injectable()
 export class AuthService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
+        private jwtService: JwtService,
     ) {}
 
     async signUp( authCredentialsDto: AuthCredentialsDto): Promise<void> {
@@ -39,7 +41,7 @@ export class AuthService {
         
     }
 
-    async validateUserPassword(authCredentialsDto: AuthCredentialsDto): Promise<string> {
+    async signin(authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string}> {
         const user = await this.userRepository.findOne({
             where: { username: authCredentialsDto.username },
         })
@@ -48,11 +50,23 @@ export class AuthService {
             throw new UnauthorizedException("Invalid Credentials")
         }
         
+        
         if (user && await user.validatePassword(authCredentialsDto.password)) {
-            return user.username;
-        } else {
-            return null;
+            
+
+            
+        
+        // else {
+        //     return null;
+        // }
+
+        const playload: JwtPlayload = { username: user.username };
+        const accessToken = await this.jwtService.sign(playload);
+
+        return { accessToken }
+
         }
+
         
        
     }
