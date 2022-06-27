@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { AuthCredentialsDto } from "src/dto/auth-credentials.dto";
 import { User } from "src/entities/user.entity";
 import { Repository } from "typeorm";
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class AuthService {
@@ -12,9 +13,14 @@ export class AuthService {
     ) {}
 
     async signUp( authCredentialsDto: AuthCredentialsDto): Promise<void> {
+        const saltOrRounds = 10; //cost factor
+        const hash = await bcrypt.hash( authCredentialsDto.password,saltOrRounds );
+        authCredentialsDto.password = hash;
         const user = this.userRepository.create({
             ...authCredentialsDto,
         })
+
+        // console.log(authCredentialsDto.password)
 
         //23505 is a code for duplicate username
         try {
