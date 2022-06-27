@@ -22,7 +22,7 @@ export class BlogController {
     }
 
     @Post('/')
-    async createBlog(@Body() createBlogDto:CreateBlogDto): Promise<Blog> {
+    async createBlog(@Body(ValidationPipe) createBlogDto:CreateBlogDto): Promise<Blog> {
         // console.log('create-dto', createBlogDto.title)
         return this.blogService.createBlog(createBlogDto)
         }
