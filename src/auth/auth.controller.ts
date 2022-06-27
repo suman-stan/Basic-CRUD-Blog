@@ -1,4 +1,4 @@
-import { Body, Controller, Post, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Post, ValidationPipe } from "@nestjs/common";
 import { AuthCredentialsDto } from "src/dto/auth-credentials.dto";
 import { User } from "src/entities/user.entity";
 import { AuthService } from "./auth.service";
@@ -15,4 +15,8 @@ export class AuthController {
         return this.authService.signUp(authCredentialsDto);
     }
     
+    @Post('/signin')
+    async signin(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto) {
+        return await this.authService.validateUserPassword(authCredentialsDto)
+    }
 }

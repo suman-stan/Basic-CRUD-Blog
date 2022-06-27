@@ -1,9 +1,10 @@
-import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AuthCredentialsDto } from "src/dto/auth-credentials.dto";
 import { User } from "src/entities/user.entity";
 import { Repository } from "typeorm";
 import * as bcrypt from 'bcrypt'
+import e from "express";
 
 @Injectable()
 export class AuthService {
@@ -24,9 +25,7 @@ export class AuthService {
         const user = this.userRepository.create({
             ...authCredentialsDto,
         })
-
         // console.log(authCredentialsDto.password)
-
         //23505 is a code for duplicate username
         try {
         await this.userRepository.save(user)
@@ -38,5 +37,23 @@ export class AuthService {
             }
         }
         
+    }
+
+    async validateUserPassword(authCredentialsDto: AuthCredentialsDto): Promise<string> {
+        const user = await this.userRepository.findOne({
+            where: { username: authCredentialsDto.username },
+        })
+
+        if (!user) {
+            throw new UnauthorizedException("Invalid Credentials")
+        }
+        
+        if (user && await user.validatePassword(authCredentialsDto.password)) {
+            return user.username;
+        } else {
+            return null;
+        }
+        
+       
     }
 }
