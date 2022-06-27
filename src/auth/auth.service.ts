@@ -16,6 +16,7 @@ export class AuthService {
             ...authCredentialsDto,
         })
 
+        //23505 is a code for duplicate username
         try {
         await this.userRepository.save(user)
         } catch (error) {
