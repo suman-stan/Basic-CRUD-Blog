@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString, Matches, MaxLength, MinLength } from "class-validator";
+import { Column } from "typeorm";
 
 export class AuthCredentialsDto {
 
@@ -15,6 +16,8 @@ export class AuthCredentialsDto {
         {message: "Password too weak"},
     )
     password: string;
+
+    salt: string;
 
 
 }

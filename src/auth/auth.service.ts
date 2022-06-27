@@ -13,8 +13,13 @@ export class AuthService {
     ) {}
 
     async signUp( authCredentialsDto: AuthCredentialsDto): Promise<void> {
-        const saltOrRounds = 10; //cost factor
-        const hash = await bcrypt.hash( authCredentialsDto.password,saltOrRounds );
+        
+        // const saltOrRounds = 10; //cost factor
+        //const hash = await bcrypt.hash( authCredentialsDto.password,saltOrRounds );
+        
+        const salt = await bcrypt.genSalt()
+        authCredentialsDto.salt = salt
+        const hash = await bcrypt.hash( authCredentialsDto.password,salt );
         authCredentialsDto.password = hash;
         const user = this.userRepository.create({
             ...authCredentialsDto,
