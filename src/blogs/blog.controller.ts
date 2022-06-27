@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { CreateBlogDto } from "src/dto/create-blog.dto";
 import { CreateCommentDto } from "src/dto/create-comment.dto";
 import { UpdateBlogDto } from "src/dto/update-blog.dto";
@@ -6,6 +7,7 @@ import { Blog } from "src/entities/blog.entity";
 import { BlogService } from "./blog.service";
 
 @Controller('/blog')
+@UseGuards(AuthGuard())
 export class BlogController {
     constructor(
         private readonly blogService:BlogService
