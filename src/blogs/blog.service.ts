@@ -36,12 +36,12 @@ export class BlogService {
         });
 
         if(!blog) {
-            console.log("expection worked");
+            // console.log("expection worked");
             throw new NotFoundException("BLog do not exit")
             
         }
 
-        console.log("expection DIDNT worked");
+        // console.log("expection DIDNT worked");
         return blog;
     }
 
